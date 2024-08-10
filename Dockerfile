@@ -1,41 +1,26 @@
-name: CI/CD Build MultiArch
+FROM python:3.12.4-slim  
+#https://hub.docker.com/_/python
 
-# on:
-#   push:
-#     branches:
-#       - main
-on:
-  push:
-    branches: ["main"]
-  workflow_dispatch:
+LABEL maintainer="IoTechCrafts OU"
 
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
+# Copy local code to the container image.
+ENV APP_HOME /app
+WORKDIR $APP_HOME
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+COPY . ./
 
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
+# RUN apt-get update && apt-get install -y \
+#     build-essential \
+#     curl \
+#     software-properties-common \
+#     git \
+#     && rm -rf /var/lib/apt/lists/*
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+# Install production dependencies.
+RUN pip install -r requirements.txt
 
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v1
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.CICD_TOKEN_LANGFLOW }}
+# For Scrapegraph
+RUN playwright install-deps \
+    && playwright install
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        platforms: linux/amd64,linux/arm64
-        tags: |
-          ghcr.io/iotechcrafts/langflow:v1
-          ghcr.io/iotechcrafts/langflow:latest
+EXPOSE 7860
