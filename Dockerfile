@@ -19,8 +19,5 @@ COPY . ./
 # Install production dependencies.
 RUN pip install -r requirements.txt
 
-# For Scrapegraph
-RUN playwright install-deps \
-    && playwright install
 
 EXPOSE 7860
