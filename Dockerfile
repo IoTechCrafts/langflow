@@ -1,9 +1,13 @@
 name: CI/CD Build MultiArch
 
+# on:
+#   push:
+#     branches:
+#       - main
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   build-and-push:
