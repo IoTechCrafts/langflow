@@ -38,5 +38,5 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: |
-          ghcr.io//iotechcrafts/langflow:v1
-          ghcr.io//iotechcrafts/langflow:latest
+          ghcr.io/iotechcrafts/langflow:v1
+          ghcr.io/iotechcrafts/langflow:latest
